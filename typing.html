@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <script src="google-tag-bootstrap.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="GitHub Pagesで動く、ブラウザだけで遊べるローマ字タイピング練習ツールです。">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="タイピング練習 | zuyasi">
+  <meta property="og:description" content="ブラウザだけで動くローマ字タイピング練習ツールです。">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <link rel="canonical" href="https://9z2fqjckjv-bot.github.io/zuyasi.github.io/typing.html">
+  <title>タイピング練習 | zuyasi</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #eef4ff;
+      --bg-strong: #dbeafe;
+      --surface: rgba(255, 255, 255, 0.92);
+      --surface-strong: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --border: rgba(148, 163, 184, 0.28);
+      --shadow: 0 22px 60px rgba(15, 23, 42, 0.14);
+      --shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.08);
+      --radius: 24px;
+      --radius-sm: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a;
+        --bg-strong: #172554;
+        --surface: rgba(15, 23, 42, 0.86);
+        --surface-strong: #111827;
+        --text: #f8fafc;
+        --muted: #cbd5e1;
+        --primary: #60a5fa;
+        --primary-hover: #93c5fd;
+        --success: #4ade80;
+        --danger: #f87171;
+        --warning: #fbbf24;
+        --border: rgba(148, 163, 184, 0.24);
+        --shadow: 0 22px 60px rgba(0, 0, 0, 0.34);
+        --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.24);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.20), transparent 34%),
+        linear-gradient(135deg, var(--bg-strong), var(--bg));
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      text-underline-offset: 3px;
+    }
+
+    a:hover,
+    a:focus-visible {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.28);
+      outline-offset: 3px;
+    }
+
+    .container {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    .hero,
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero {
+      padding: 32px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.12);
+      color: var(--primary);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    h1,
+    h2,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .lead {
+      max-width: 68ch;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .typing-panel {
+      min-height: 520px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: end;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label,
+    .label {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    select {
+      min-height: 44px;
+      padding: 0 40px 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface-strong);
+      color: var(--text);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .button {
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+      box-shadow: none;
+    }
+
+    .button.secondary:hover,
+    .button.secondary:focus-visible {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.08);
+    }
+
+    .status-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .metric {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-strong);
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 2px;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      line-height: 1.2;
+    }
+
+    .question {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent),
+        var(--surface-strong);
+    }
+
+    .japanese {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .kana {
+      margin: 0;
+      color: var(--text);
+      font-size: clamp(1.15rem, 3vw, 1.55rem);
+      font-weight: 800;
+    }
+
+    .target {
+      min-height: 74px;
+      margin: 0;
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(15, 23, 42, 0.04);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: clamp(1.35rem, 4vw, 2rem);
+      line-height: 1.45;
+      letter-spacing: 0.03em;
+      overflow-wrap: anywhere;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .target {
+        background: rgba(255, 255, 255, 0.06);
+      }
+    }
+
+    .target .correct {
+      color: var(--success);
+    }
+
+    .target .wrong {
+      color: var(--danger);
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+    }
+
+    .target .current {
+      color: var(--primary);
+      background: rgba(37, 99, 235, 0.14);
+      border-radius: 4px;
+    }
+
+    .typing-input {
+      width: 100%;
+      min-height: 58px;
+      padding: 0 18px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-strong);
+      color: var(--text);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .typing-input:disabled {
+      cursor: not-allowed;
+      opacity: 0.72;
+    }
+
+    .message {
+      min-height: 28px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .message.good {
+      color: var(--success);
+    }
+
+    .message.warn {
+      color: var(--warning);
+    }
+
+    .side-panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .ranking-list,
+    .tips-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .ranking-list li,
+    .tips-list li {
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-strong);
+    }
+
+    .ranking-list strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    .empty {
+      color: var(--muted);
+    }
+
+    .back-link {
+      display: inline-flex;
+      margin-top: 24px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 20px, 1080px);
+        padding: 20px 0 36px;
+      }
+
+      .hero,
+      .panel {
+        padding: 20px;
+        border-radius: 20px;
+      }
+
+      .toolbar {
+        align-items: stretch;
+      }
+
+      .field,
+      .actions,
+      .button {
+        width: 100%;
+      }
+
+      .status-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .question {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <p class="eyebrow">Typing tool</p>
+      <h1>タイピング練習</h1>
+      <p class="lead">GitHub Pagesでそのまま動く、ローマ字入力のタイピング練習ツールです。制限時間を選んで、WPM・正確率・ミス数を確認できます。</p>
+    </header>
+
+    <main class="app-grid">
+      <section class="panel typing-panel" aria-labelledby="typing-title">
+        <div class="toolbar">
+          <div class="field">
+            <label for="duration">制限時間</label>
+            <select id="duration">
+              <option value="30">30秒</option>
+              <option value="60" selected>60秒</option>
+              <option value="90">90秒</option>
+              <option value="120">120秒</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button class="button" id="startButton" type="button">スタート</button>
+            <button class="button secondary" id="resetButton" type="button">リセット</button>
+          </div>
+        </div>
+
+        <div class="status-bar" aria-label="練習結果">
+          <div class="metric">
+            <span>残り時間</span>
+            <strong id="timeLeft">60</strong>
+          </div>
+          <div class="metric">
+            <span>WPM</span>
+            <strong id="wpm">0</strong>
+          </div>
+          <div class="metric">
+            <span>正確率</span>
+            <strong id="accuracy">100%</strong>
+          </div>
+          <div class="metric">
+            <span>クリア数</span>
+            <strong id="cleared">0</strong>
+          </div>
+        </div>
+
+        <h2 id="typing-title" class="label">お題</h2>
+        <div class="question" aria-live="polite">
+          <p class="japanese" id="japaneseText">スタートを押すとお題が表示されます。</p>
+          <p class="kana" id="kanaText">スペースや記号もそのまま入力します。</p>
+          <p class="target" id="targetText" aria-label="入力するローマ字">ready</p>
+        </div>
+
+        <label class="label" for="typingInput">ここに入力</label>
+        <input
+          class="typing-input"
+          id="typingInput"
+          type="text"
+          inputmode="latin"
+          autocomplete="off"
+          autocapitalize="none"
+          spellcheck="false"
+          disabled
+          aria-describedby="message"
+        >
+        <p class="message" id="message">スタート後、表示されたローマ字を入力してください。</p>
+      </section>
+
+      <aside class="side-panel" aria-label="記録とヒント">
+        <section class="panel">
+          <h2>ベスト記録</h2>
+          <ol class="ranking-list" id="rankingList">
+            <li class="empty">まだ記録がありません。</li>
+          </ol>
+        </section>
+
+        <section class="panel">
+          <h2>使い方</h2>
+          <ul class="tips-list">
+            <li>「スタート」を押すとタイマーが始まります。</li>
+            <li>入力が合っている文字は緑、違う文字は赤で表示されます。</li>
+            <li>お題を最後まで入力すると、自動で次のお題へ進みます。</li>
+            <li>ベスト記録はこのブラウザ内に保存されます。</li>
+          </ul>
+          <a class="back-link" href="index.html">← トップに戻る</a>
+        </section>
+      </aside>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 zuyasi</p>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const phrases = [
+        { ja: "今日は集中して練習します", kana: "きょうはしゅうちゅうしてれんしゅうします", romaji: "kyou wa shuuchuu shite renshuu shimasu" },
+        { ja: "小さな積み重ねが大きな力になる", kana: "ちいさなつみかさねがおおきなちからになる", romaji: "chiisana tsumikasane ga ookina chikara ni naru" },
+        { ja: "正確に打つことを意識しましょう", kana: "せいかくにうつことをいしきしましょう", romaji: "seikaku ni utsu koto wo ishiki shimashou" },
+        { ja: "パソコン操作をもっと楽しく", kana: "ぱそこんそうさをもっとたのしく", romaji: "pasokon sousa wo motto tanoshiku" },
+        { ja: "焦らずリズムよく入力する", kana: "あせらずりずむよくにゅうりょくする", romaji: "aserazu rizumu yoku nyuuryoku suru" },
+        { ja: "ブラウザだけで練習できます", kana: "ぶらうざだけでれんしゅうできます", romaji: "burauza dake de renshuu dekimasu" },
+        { ja: "毎日の練習で速度が上がる", kana: "まいにちのれんしゅうでそくどがあがる", romaji: "mainichi no renshuu de sokudo ga agaru" },
+        { ja: "ミスを減らして安定させる", kana: "みすをへらしてあんていさせる", romaji: "misu wo herashite antei saseru" },
+        { ja: "画面をよく見て落ち着いて打つ", kana: "がめんをよくみておちついてうつ", romaji: "gamen wo yoku mite ochitsuite utsu" },
+        { ja: "新しいツールを公開しました", kana: "あたらしいつーるをこうかいしました", romaji: "atarashii tsuuru wo koukai shimashita" },
+        { ja: "短い文章から始めましょう", kana: "みじかいぶんしょうからはじめましょう", romaji: "mijikai bunshou kara hajimemashou" },
+        { ja: "最後まであきらめずに続ける", kana: "さいごまであきらめずにつづける", romaji: "saigo made akiramezu ni tsuzukeru" }
+      ];
+
+      const storageKey = "zuyasiTypingBestScores";
+      const durationSelect = document.querySelector("#duration");
+      const startButton = document.querySelector("#startButton");
+      const resetButton = document.querySelector("#resetButton");
+      const typingInput = document.querySelector("#typingInput");
+      const japaneseText = document.querySelector("#japaneseText");
+      const kanaText = document.querySelector("#kanaText");
+      const targetText = document.querySelector("#targetText");
+      const message = document.querySelector("#message");
+      const timeLeft = document.querySelector("#timeLeft");
+      const wpm = document.querySelector("#wpm");
+      const accuracy = document.querySelector("#accuracy");
+      const cleared = document.querySelector("#cleared");
+      const rankingList = document.querySelector("#rankingList");
+
+      let currentPhrase = phrases[0];
+      let currentIndex = 0;
+      let timerId = 0;
+      let startedAt = 0;
+      let lastInput = "";
+      let state = createInitialState();
+
+      function createInitialState() {
+        return {
+          running: false,
+          duration: Number(durationSelect.value),
+          remaining: Number(durationSelect.value),
+          totalTyped: 0,
+          correctTyped: 0,
+          mistakes: 0,
+          completed: 0
+        };
+      }
+
+      function startGame() {
+        window.clearInterval(timerId);
+        state = createInitialState();
+        state.running = true;
+        startedAt = Date.now();
+        lastInput = "";
+        typingInput.disabled = false;
+        typingInput.value = "";
+        durationSelect.disabled = true;
+        startButton.textContent = "やり直す";
+        message.textContent = "入力を開始してください。";
+        message.className = "message";
+        chooseNextPhrase(true);
+        updateStats();
+        typingInput.focus();
+        timerId = window.setInterval(tick, 1000);
+      }
+
+      function resetGame() {
+        window.clearInterval(timerId);
+        state = createInitialState();
+        lastInput = "";
+        typingInput.value = "";
+        typingInput.disabled = true;
+        durationSelect.disabled = false;
+        startButton.textContent = "スタート";
+        japaneseText.textContent = "スタートを押すとお題が表示されます。";
+        kanaText.textContent = "スペースや記号もそのまま入力します。";
+        renderTarget("ready", "");
+        message.textContent = "スタート後、表示されたローマ字を入力してください。";
+        message.className = "message";
+        updateStats();
+      }
+
+      function tick() {
+        const elapsedSeconds = Math.floor((Date.now() - startedAt) / 1000);
+        state.remaining = Math.max(0, state.duration - elapsedSeconds);
+        updateStats();
+        if (state.remaining <= 0) {
+          finishGame();
+        }
+      }
+
+      function finishGame() {
+        window.clearInterval(timerId);
+        state.running = false;
+        typingInput.disabled = true;
+        durationSelect.disabled = false;
+        startButton.textContent = "もう一度";
+        const result = getResult();
+        saveScore(result);
+        renderRanking();
+        message.textContent = `終了！ WPM ${result.wpm}、正確率 ${result.accuracy}%、クリア数 ${state.completed} でした。`;
+        message.className = "message good";
+      }
+
+      function chooseNextPhrase(forceDifferent) {
+        let nextIndex = Math.floor(Math.random() * phrases.length);
+        if (forceDifferent && phrases.length > 1) {
+          while (nextIndex === currentIndex) {
+            nextIndex = Math.floor(Math.random() * phrases.length);
+          }
+        }
+        currentIndex = nextIndex;
+        currentPhrase = phrases[currentIndex];
+        japaneseText.textContent = currentPhrase.ja;
+        kanaText.textContent = currentPhrase.kana;
+        typingInput.maxLength = currentPhrase.romaji.length;
+        renderTarget(currentPhrase.romaji, typingInput.value);
+      }
+
+      function handleInput(event) {
+        if (!state.running) {
+          return;
+        }
+
+        const value = event.target.value.toLowerCase();
+        if (value !== event.target.value) {
+          event.target.value = value;
+        }
+
+        if (value.length > lastInput.length) {
+          const added = value.slice(lastInput.length);
+          for (let i = 0; i < added.length; i += 1) {
+            const position = lastInput.length + i;
+            state.totalTyped += 1;
+            if (added[i] === currentPhrase.romaji[position]) {
+              state.correctTyped += 1;
+            } else {
+              state.mistakes += 1;
+            }
+          }
+        }
+
+        lastInput = value;
+        renderTarget(currentPhrase.romaji, value);
+
+        if (value === currentPhrase.romaji) {
+          state.completed += 1;
+          typingInput.value = "";
+          lastInput = "";
+          message.textContent = "クリア！ 次のお題です。";
+          message.className = "message good";
+          chooseNextPhrase(true);
+        } else if (currentPhrase.romaji.startsWith(value)) {
+          message.textContent = "その調子です。";
+          message.className = "message";
+        } else {
+          message.textContent = "違う文字があります。Backspaceで直せます。";
+          message.className = "message warn";
+        }
+
+        updateStats();
+      }
+
+      function renderTarget(target, typed) {
+        targetText.replaceChildren(
+          ...target.split("").map((character, index) => {
+            const span = document.createElement("span");
+            span.textContent = character;
+            if (typed[index] === undefined) {
+              span.className = index === typed.length ? "current" : "";
+            } else {
+              span.className = typed[index] === character ? "correct" : "wrong";
+            }
+            return span;
+          })
+        );
+      }
+
+      function getResult() {
+        const elapsedMinutes = Math.max((state.duration - state.remaining) / 60, 1 / 60);
+        const currentWpm = Math.round((state.correctTyped / 5) / elapsedMinutes);
+        const currentAccuracy = state.totalTyped === 0
+          ? 100
+          : Math.round((state.correctTyped / state.totalTyped) * 100);
+
+        return {
+          wpm: currentWpm,
+          accuracy: currentAccuracy,
+          completed: state.completed,
+          mistakes: state.mistakes,
+          duration: state.duration,
+          playedAt: new Date().toLocaleString("ja-JP")
+        };
+      }
+
+      function updateStats() {
+        const result = getResult();
+        timeLeft.textContent = String(state.remaining);
+        wpm.textContent = String(result.wpm);
+        accuracy.textContent = `${result.accuracy}%`;
+        cleared.textContent = String(state.completed);
+      }
+
+      function loadScores() {
+        try {
+          const scores = JSON.parse(window.localStorage.getItem(storageKey) || "[]");
+          return Array.isArray(scores) ? scores : [];
+        } catch (error) {
+          console.warn("Typing score data could not be loaded.", error);
+          return [];
+        }
+      }
+
+      function saveScore(score) {
+        const scores = loadScores()
+          .concat(score)
+          .sort((a, b) => b.wpm - a.wpm || b.accuracy - a.accuracy || b.completed - a.completed)
+          .slice(0, 5);
+        window.localStorage.setItem(storageKey, JSON.stringify(scores));
+      }
+
+      function renderRanking() {
+        const scores = loadScores();
+        if (scores.length === 0) {
+          rankingList.innerHTML = '<li class="empty">まだ記録がありません。</li>';
+          return;
+        }
+
+        rankingList.replaceChildren(
+          ...scores.map((score, index) => {
+            const item = document.createElement("li");
+            const title = document.createElement("strong");
+            const detail = document.createElement("span");
+            title.textContent = `${index + 1}位 WPM ${score.wpm}`;
+            detail.textContent = `正確率 ${score.accuracy}% / ${score.completed}問 / ${score.duration}秒`;
+            item.append(title, detail);
+            return item;
+          })
+        );
+      }
+
+      durationSelect.addEventListener("change", resetGame);
+      startButton.addEventListener("click", startGame);
+      resetButton.addEventListener("click", resetGame);
+      typingInput.addEventListener("input", handleInput);
+
+      renderRanking();
+      resetGame();
+    })();
+  </script>
+</body>
+</html>

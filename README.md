@@ -12,6 +12,7 @@ zuyasi に関するプロフィール、スキル、学歴・職歴、取得資�
 | 連絡先 | `contact.html` |
 | YouTubeコンテンツ一覧 | `YouTube.html` |
 | サイトリンク | `site-links.html` |
+| タイピング練習 | `typing.html` |
 
 ## 公開 URL
 
