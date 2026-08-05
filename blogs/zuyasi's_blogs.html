@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <script src="../google-tag-bootstrap.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="zuyasi のブログ一覧です。PC操作、業務効率化、Web制作、日記などをまとめていきます。">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="ブログ | zuyasi">
+  <meta property="og:description" content="zuyasi のブログ一覧です。PC操作、業務効率化、Web制作、日記などをまとめていきます。">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <link rel="canonical" href="https://9z2fqjckjv-bot.github.io/zuyasi.github.io/blogs/zuyasi%27s_blogs.html">
+  <title>ブログ | zuyasi</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f7f9fc;
+      --surface: rgba(255, 255, 255, 0.92);
+      --surface-strong: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --border: rgba(148, 163, 184, 0.28);
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+      --shadow-soft: 0 10px 26px rgba(15, 23, 42, 0.06);
+      --radius: 20px;
+      --radius-sm: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111827;
+        --surface: rgba(31, 41, 55, 0.92);
+        --surface-strong: #1f2937;
+        --text: #f9fafb;
+        --muted: #d1d5db;
+        --primary: #60a5fa;
+        --primary-hover: #93c5fd;
+        --border: rgba(148, 163, 184, 0.24);
+        --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+        --shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.20);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(37, 99, 235, 0.12), transparent 38%),
+        linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.7;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      text-underline-offset: 3px;
+    }
+
+    a:hover,
+    a:focus-visible {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    a:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.28);
+      outline-offset: 3px;
+    }
+
+    .container {
+      width: min(920px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 40px 0 56px;
+    }
+
+    .hero,
+    .section,
+    .blog-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero {
+      margin-bottom: 22px;
+      padding: 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.10);
+      color: var(--primary);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+    }
+
+    .lead {
+      max-width: 68ch;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .section {
+      padding: 24px;
+      border-radius: var(--radius);
+    }
+
+    .section-title {
+      margin-bottom: 16px;
+      font-size: 1.25rem;
+    }
+
+    .blog-list,
+    .topic-list,
+    .nav-list {
+      display: grid;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .blog-card {
+      display: grid;
+      gap: 8px;
+      padding: 18px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-strong);
+    }
+
+    .blog-card h3 {
+      margin-bottom: 0;
+      font-size: 1.08rem;
+    }
+
+    .blog-card p,
+    .topic-list p,
+    .nav-list span {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .status {
+      display: inline-flex;
+      width: fit-content;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--primary);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .subgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .topic-list li,
+    .nav-list a {
+      display: block;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-strong);
+    }
+
+    .topic-list strong,
+    .nav-list strong {
+      display: block;
+      color: var(--text);
+    }
+
+    .nav-list a {
+      transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .nav-list a:hover,
+    .nav-list a:focus-visible {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.06);
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 24px;
+      font-weight: 700;
+    }
+
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 720px) {
+      .subgrid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 24px, 920px);
+        padding: 24px 0 40px;
+      }
+
+      .hero,
+      .section {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <p class="eyebrow">Blog</p>
+      <h1>zuyasiのブログ</h1>
+      <p class="lead">PC操作、業務効率化、Web制作、日々の記録などをまとめる場所です。公開できる記事から順番に追加していきます。</p>
+    </header>
+
+    <main aria-label="ブログ一覧">
+      <section class="section" aria-labelledby="blog-list-title">
+        <h2 class="section-title" id="blog-list-title">ブログ一覧</h2>
+        <ul class="blog-list">
+          <li>
+            <article class="blog-card">
+              <span class="status">準備中</span>
+              <h3>最初の記事を準備しています</h3>
+              <p>公開前の記事はまだありません。サイトの更新、PCの小技、制作したツールのメモなどを掲載予定です。</p>
+            </article>
+          </li>
+        </ul>
+      </section>
+
+      <div class="subgrid">
+        <section class="section" aria-labelledby="topics-title">
+          <h2 class="section-title" id="topics-title">書く予定のテーマ</h2>
+          <ul class="topic-list">
+            <li>
+              <strong>PCと効率化</strong>
+              <p>文書作成、表計算、VBA、作業を楽にする小技。</p>
+            </li>
+            <li>
+              <strong>Web制作</strong>
+              <p>GitHub Pagesで公開しているページやツールの制作メモ。</p>
+            </li>
+            <li>
+              <strong>日記</strong>
+              <p>活動記録や、あとから見返したい出来事。</p>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section" aria-labelledby="related-title">
+          <h2 class="section-title" id="related-title">関連ページ</h2>
+          <ul class="nav-list">
+            <li><a href="../index.html"><strong>トップページ</strong><span>プロフィールと公開ツールの概要</span></a></li>
+            <li><a href="../site-links.html"><strong>サイトリンク</strong><span>サイト内外のリンク一覧</span></a></li>
+            <li><a href="../typing.html"><strong>タイピング練習</strong><span>ブラウザで使える練習ツール</span></a></li>
+            <li><a href="../contact.html"><strong>連絡先</strong><span>お問い合わせ先の案内</span></a></li>
+          </ul>
+        </section>
+      </div>
+
+      <a class="back-link" href="../index.html">← トップに戻る</a>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 zuyasi</p>
+    </footer>
+  </div>
+</body>
+</html>
