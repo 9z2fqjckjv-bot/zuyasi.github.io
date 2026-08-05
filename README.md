@@ -16,4 +16,4 @@ zuyasi に関するプロフィール、スキル、学歴・職歴、取得資�
 
 ## 公開 URL
 
-<https://9z2fqjckjv-bot.github.io/zuyasi.github.io/>
+<https://9z2fqjckjv-bot.github.io/zuyasi.github.io/main/index.html>
