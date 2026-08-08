@@ -6,13 +6,13 @@ zuyasi に関するプロフィール、スキル、学歴・職歴、取得資�
 
 | ページ | ファイル |
 |---|---|
-| トップページ | `index.html` |
-| 取得済み資格・試験 | `Acquired-certification-exams.html` |
-| 学歴と職歴 | `School-&-Works.html` |
-| 連絡先 | `contact.html` |
-| YouTubeコンテンツ一覧 | `YouTube.html` |
-| サイトリンク | `site-links.html` |
-| タイピング練習 | `typing.html` |
+| トップページ | `main/index.html` |
+| 取得済み資格・試験 | `main/Acquired-certification-exams.html` |
+| 学歴と職歴 | `main/School-&-Works.html` |
+| 連絡先 | `main/contact.html` |
+| サイトリンク | `main/site-links.html` |
+| タイピング練習 | `main/typing.html` |
+| ブログ | `blogs/zuyasi's_blogs.html` |
 
 ## 公開 URL
 
